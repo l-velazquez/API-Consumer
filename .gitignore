@@ -1,0 +1,15 @@
+# Ignore JSON
+*.json
+
+# Ignore log files
+*.log
+
+# Ignore environment file
+.env
+
+#Ignore .DS_Store
+.DS_Store
+
+# Ignore virtual environment
+venv/
+
