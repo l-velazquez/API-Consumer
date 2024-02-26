@@ -75,7 +75,7 @@ def get_users(range, base_url, admin_login, headers):
     print("-"*140, "\n")
 
     admin_response = POST_request(url_auth, admin_login, headers)
-    if admin_response["success"]==False:
+    if not(admin_response["success"]):
         print("No data returned")
         # get out of the function
         return
@@ -86,16 +86,100 @@ def get_users(range, base_url, admin_login, headers):
     amount_of_users = 0
 
     for i in range:
-        user = GET_request(url_users+"/"+str(i+1), headers)
+        user = GET_request(url_users+"/"+str(i), headers)
     
         if not(user["success"]):
             print("\tNo data returned")
+            return
             # get out of the function
         else:
             print("\t"+user["data"]["fullName"])
             amount_of_users += 1
     print("-"*140,f"\nTotal amount of users: {amount_of_users}")
     
+def get_products(range, base_url, admin_login, headers):
+    headers = headers # make a copy of the headers
+    # Endpoints
+    authenticate = ["/Auth/login", "/Auth/logout"]
+    products = "/Products"
+    
+    url_auth = base_url+authenticate[0]
+    url_products = base_url+products
+
+    #login as admin
+    print("Logging in as admin")
+    print("-"*140, "\n")
+
+    admin_response = POST_request(url_auth, admin_login, headers)
+    if not(admin_response["success"]):
+        print("No data returned")
+        # get out of the function
+        return
+    
+    token = admin_response["data"]["accessToken"] # get token from response
+    headers['Authorization'] = "Bearer " + token # add token to headers
+
+    amount_of_products = 0
+
+    products = GET_request(url_products, headers)
+    save_json(products, "products.json")
+
+
+    for i in range:
+        product = GET_request(url_products+"/"+str(i), headers)
+    
+        if not(product["success"]):
+            print("\tNo data returned")
+            print("-"*140,f"\nTotal amount of products: {amount_of_products}")
+            return
+            # get out of the function
+        else:
+            print("\tProduct "+str(i))
+            print("-"*140, "\n")
+            print("\tID:\t\t" + str(product["data"]["id"]))
+            print("\tName:\t\t" + product["data"]["name"])
+            print("\tDescription:\t" + product["data"]["description"])
+            print("\tPrice:\t\t$" + str(product["data"]["price"]))
+            print("\tQuantity:\t" + str(product["data"]["quantity"]))
+            print("\n")
+            amount_of_products += 1
+    print("-"*140,f"\nTotal amount of products: {amount_of_products}")
+
+def get_roles(range, base_url, admin_login, headers):
+    headers = headers # make a copy of the headers
+    # Endpoints
+    authenticate = ["/Auth/login", "/Auth/logout"]
+    roles = "/Roles"
+    
+    url_auth = base_url+authenticate[0]
+    url_roles = base_url+roles
+
+    #login as admin
+    print("Logging in as admin")
+    print("-"*140, "\n")
+
+    admin_response = POST_request(url_auth, admin_login, headers)
+    if admin_response["success"]==False:
+        print("No data returned")
+        # get out of the function
+        return
+    
+    token = admin_response["data"]["accessToken"] # get token from response
+    headers['Authorization'] = "Bearer " + token # add token to headers
+
+    amount_of_roles = 0
+
+    for i in range:
+        role = GET_request(url_roles+"/"+str(i), headers)
+    
+        if not(role["success"]):
+            print("\tNo data returned")
+            return
+            # get out of the function
+        else:
+            print("\t"+role["data"]["name"])
+            amount_of_roles += 1
+    print("-"*140,f"\nTotal amount of roles: {amount_of_roles}")
 
 def admin_requests(base_url, admin_login, headers):
     headers = headers # make a copy of the headers
@@ -206,29 +290,36 @@ def user_requests(base_url, user_login, headers):
     POST_request(url_logout, {}, headers)
     print("\n\nLogged out as user")
 
+def main():
 
-base_url = "https://ccom4995-assignment2.azurewebsites.net/api/v1"
+    base_url = "https://ccom4995-assignment2.azurewebsites.net/api/v1"
 
-# Authentication
-username = os.getenv("username")
-password = os.getenv("password")
-username2 = os.getenv("username2")
-password2 = os.getenv("password2")
+    # Authentication
+    username = os.getenv("username")
+    password = os.getenv("password")
+    username2 = os.getenv("username2")
+    password2 = os.getenv("password2")
 
-# load data
-admin_login ={
-        "userName": username,
-        "password": password,
-    }
-user_login ={
-        "userName": username2,
-        "password": password2,
-    }
+    # load data
+    admin_login ={
+            "userName": username,
+            "password": password,
+        }
+    user_login ={
+            "userName": username2,
+            "password": password2,
+        }
 
-headers = {'Content-Type': 'application/json'}
+    headers = {'Content-Type': 'application/json'}
 
 
-# admin_requests(base_url, admin_login, headers)
-# user_requests(base_url, user_login, headers)
+    # admin_requests(base_url, admin_login, headers)
+    # user_requests(base_url, user_login, headers)
 
-get_users(range(1, 36), base_url, admin_login, headers)
+    #get_users(range(1, 36), base_url, admin_login, headers)
+    get_products(range(1, 200), base_url, admin_login, headers)
+    #get_roles(range(1, 36), base_url, admin_login, headers)
+
+
+if __name__ == "__main__":
+    main()
