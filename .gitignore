@@ -13,3 +13,6 @@
 # Ignore virtual environment
 venv/
 
+# ignore pycharm files
+.idea/
+
