@@ -1,8 +1,10 @@
 # API Consumer
-
-The link to this API is not included in this repository because it is a private API made specifically for the class API design and development. The API is a simple API that has endpoints for users and admin. The admin can create, read, update and delete users. The users can only read their own information.
+ 
+The API is a simple API that has endpoints for users and admin. The admin can create, read, update and delete users. The users can only read their own information.
 
 This is a simple API consumer python script that will go through all the endpoints of the API and print the results.
+
+https://docs.google.com/document/d/1xFGlRRw6jakA0oee33j94aZ0Q69h8E_-fVsDfS64A6A/edit?usp=sharing
 
 To set this up you will need to have python installed on your machine.
 
