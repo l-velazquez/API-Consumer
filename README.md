@@ -37,10 +37,10 @@ pip install -r requirements.txt
 ## Set up environment variables
 
 ```bash
-touch .env
+cp .env_template .env
 ```
 
-Use this template an fill in the values
+Fill in the values
 
 ```bash
 # admin
@@ -52,7 +52,6 @@ username2=your_username
 password2=your_password
 ```
 
-Save the file in the root of the project.
 
 ## Run the script
 
